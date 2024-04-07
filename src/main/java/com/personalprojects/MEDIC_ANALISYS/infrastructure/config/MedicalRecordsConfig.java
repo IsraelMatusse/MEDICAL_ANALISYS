@@ -54,7 +54,7 @@ public class MedicalRecordsConfig {
     }
 
     @Bean
-    public Flyway flywayBookMigration(@Qualifier("medicalRecordsDataSource") DataSource dataSource) {
+    public Flyway flyAwayMedicalRecords(@Qualifier("medicalRecordsDataSource") DataSource dataSource) {
         Flyway flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .locations("classpath:db/migrations/medical_records")

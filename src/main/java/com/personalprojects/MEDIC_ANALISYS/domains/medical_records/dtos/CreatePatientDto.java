@@ -32,7 +32,9 @@ public record CreatePatientDto(
     float height,
     @NotNull(message = "Insira o peso do paciente")
     float weight,
-    String documentNumber
+    String documentNumber,
+    String gender,
+    String bloodType
 
 
 ) {

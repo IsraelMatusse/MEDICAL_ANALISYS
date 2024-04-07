@@ -1,5 +1,7 @@
 package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models;
 
+import com.personalprojects.MEDIC_ANALISYS.enums.BloodType;
+import com.personalprojects.MEDIC_ANALISYS.enums.Genders;
 import com.personalprojects.MEDIC_ANALISYS.enums.LevelUrgency;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,5 +30,6 @@ public class Screening {
     private Patient patient;
     @ManyToOne
     private VitalSigns vitalSigns;
+
 
 }

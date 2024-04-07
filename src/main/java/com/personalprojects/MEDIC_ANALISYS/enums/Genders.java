@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public enum Genders {
 
-    MALE("Male"),
-    FEMALE("Female"),
-    OTHER("Other"),
-    UNKNOWN("Unknown");
+    MASCULINO("Masculino"),
+    FEMININO("Feminino"),
+    OUTROS("Outros"),
+    DESCONHECIDO("Desconhecido");
 
     private final String value;
 

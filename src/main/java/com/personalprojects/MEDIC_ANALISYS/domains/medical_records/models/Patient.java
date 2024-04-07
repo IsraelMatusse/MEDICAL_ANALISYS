@@ -21,7 +21,7 @@ public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
     private String name;
     private String surname;
     @Column(name = "fathers_name")
@@ -44,9 +44,12 @@ public class Patient {
     private float height;
     private float weight;
     private String code;
+    private String gender;
+    @Column(name = "blood_type")
 
+    private String bloodType;
 
-    public Patient(CreatePatientDto patent){
+    public Patient(CreatePatientDto patent, String gender, String bloodType) {
         this.code= GenerateCodes.generateBarcode();
         this.birthDate=patent.birthDate();
         this.fathersName= patent.fathersName();
@@ -61,6 +64,9 @@ public class Patient {
         this.msisdn=patent.msisdn();
         this.documentNumber=patent.documentNumber();
         this.neighboorHood=patent.neighboorHood();
+        this.bloodType=bloodType;
+        this.gender=gender;
+
     }
 
 

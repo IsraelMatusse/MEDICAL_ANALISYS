@@ -5,6 +5,7 @@ import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models.Patien
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.repositories.PatientRepo;
 import com.personalprojects.MEDIC_ANALISYS.enums.BloodType;
 import com.personalprojects.MEDIC_ANALISYS.enums.Genders;
+import com.personalprojects.MEDIC_ANALISYS.infrastructure.exceptions.ConflictException;
 import com.personalprojects.MEDIC_ANALISYS.infrastructure.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,16 +20,16 @@ public class PatientService {
 
     private final PatientRepo patientRepo;
 
-    @Transactional(value = "medicalRecordsEntityManager")
+    @Transactional(value = "medicalRecordsTransactionManager")
     public Patient create(Patient patient){
         return patientRepo.save(patient);
     }
 
-    @Transactional(value = "medicalRecordsEntityManager")
+    @Transactional(value = "medicalRecordsTransactionManager")
     public List<Patient>findAll(){
         return patientRepo.findAll();
     }
-    @Transactional(value = "medicalRecordsEntityManager")
+    @Transactional(value = "medicalRecordsTransactionManager")
     public Patient findById(UUID id) throws NotFoundException {
         return patientRepo.findById(id).orElseThrow(()->new NotFoundException("Paciente não foi encontrado"));
     }
@@ -38,24 +39,27 @@ public class PatientService {
         return patientRepo.findByCode(code).orElseThrow(()->new NotFoundException("Paciente não foi encontrado"));
     }
 
-   //  @Transactional(value = "medicalRecordsEntityManager")
+     @Transactional(value = "medicalRecordsTransactionManager")
     public  boolean existsByNameAndSurnameAndMsisdnAndFathersNameAndMothersName(String name, String surname, String msisdn, String fathersName, String mothersName){
         return patientRepo.existsByNameAndSurnameAndMsisdnAndFathersNameAndMothersName(name, surname, msisdn, fathersName, mothersName);
     }
-  //  @Transactional(value = "medicalRecordsEntityManager")
-    public void createPatient(CreatePatientDto patientDto){
-
-        if(existsByNameAndSurnameAndMsisdnAndFathersNameAndMothersName(patientDto.name(), patientDto.surname(), patientDto.msisdn(), patientDto.fathersName(), patientDto.mothersName())){
-            throw new RuntimeException("Paciente já existe");
-        }
-       /* Genders gender= Genders.valueOf(patientDto.gender().toUpperCase());
-        System.out.println(gender);
+    @Transactional(value = "medicalRecordsTransactionManager")
+    public void createPatient(CreatePatientDto patientDto) throws ConflictException {
+        try {
+            if (existsByNameAndSurnameAndMsisdnAndFathersNameAndMothersName(patientDto.name(), patientDto.surname(), patientDto.msisdn(), patientDto.fathersName(), patientDto.mothersName())) {
+                throw new ConflictException("Paciente já existe");
+            }
+        Genders gender= Genders.valueOf(patientDto.gender().toUpperCase());
         BloodType bloodType = BloodType.valueOf(patientDto.bloodType().toUpperCase());
-           System.out.println(bloodType);
 
-        */
-        Patient patient= new Patient(patientDto);
-        patientRepo.save(patient);
+
+            Patient patient = new Patient(patientDto, gender.name(), bloodType.name());
+            patientRepo.save(patient);
+        }catch (ConflictException e){
+            throw  e;
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
 }

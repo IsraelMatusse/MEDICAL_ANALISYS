@@ -3,6 +3,7 @@ package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.controllers;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.CreatePatientDto;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.services.PatientService;
 import com.personalprojects.MEDIC_ANALISYS.infrastructure.ResponseAPI;
+import com.personalprojects.MEDIC_ANALISYS.infrastructure.exceptions.ConflictException;
 import io.swagger.v3.oas.annotations.Operation;
 
 import jakarta.validation.Valid;
@@ -19,7 +20,7 @@ public class PatentController {
 
     @Operation(description = "Criar um novo paciente")
     @PostMapping
-    public ResponseEntity<ResponseAPI>createPatient(@RequestBody @Valid  CreatePatientDto patientDto){
+    public ResponseEntity<ResponseAPI>createPatient(@RequestBody @Valid  CreatePatientDto patientDto) throws ConflictException {
         patientService.createPatient(patientDto);
         return ResponseEntity.ok(new ResponseAPI("Paciente criado com sucesso!", null));
     }
