@@ -1,4 +1,4 @@
-package com.personalprojects.MEDIC_ANALISYS.config;
+package com.personalprojects.MEDIC_ANALISYS.infrastructure.config;
 
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.repositories.PatientRepo;
 import jakarta.persistence.EntityManagerFactory;
@@ -23,9 +23,9 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(
         basePackageClasses = PatientRepo.class,
         entityManagerFactoryRef = "medicalRecordsEntityManager",
-        transactionManagerRef = "medicalRecordsTransactionManager")
+        transactionManagerRef = "medicalRecordsTransactionManager"
+)
 public class MedicalRecordsConfig {
-
 
     @Bean
     @Primary
@@ -38,18 +38,19 @@ public class MedicalRecordsConfig {
     @Primary
     public LocalContainerEntityManagerFactoryBean medicalRecordsEntityManager(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("medicalRecordsDataSource") DataSource bookDataSource
+            @Qualifier("medicalRecordsDataSource") DataSource medicalRecordsDataSource
     ) {
         return builder
-                .dataSource(bookDataSource)
+                .dataSource(medicalRecordsDataSource)
                 .packages("com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models")
                 .build();
     }
 
     @Bean
     public PlatformTransactionManager medicalRecordsTransactionManager(
-            @Qualifier("medicalRecordsEntityManager") EntityManagerFactory medicaRecordsEntityManager) {
-        return new JpaTransactionManager(medicaRecordsEntityManager);
+            @Qualifier("medicalRecordsEntityManager") EntityManagerFactory medicalRecordsEntityManager
+    ) {
+        return new JpaTransactionManager(medicalRecordsEntityManager);
     }
 
     @Bean

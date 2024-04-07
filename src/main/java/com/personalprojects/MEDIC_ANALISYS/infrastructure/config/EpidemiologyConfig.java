@@ -1,4 +1,4 @@
-package com.personalprojects.MEDIC_ANALISYS.config;
+package com.personalprojects.MEDIC_ANALISYS.infrastructure.config;
 
 import com.personalprojects.MEDIC_ANALISYS.domains.epidemiology.repositories.OutBreakRepo;
 import jakarta.persistence.EntityManagerFactory;
@@ -27,28 +27,28 @@ public class EpidemiologyConfig {
 
     @Bean
     @ConfigurationProperties(prefix = "epidemiology.datasource")
-    public DataSource epdiemiologyDataSource() {
+    public DataSource epidemiologyDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean epidemiologyEntityManager(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("epdiemiologyDataSource") DataSource epdiemiologyDataSource
+            @Qualifier("epidemiologyDataSource") DataSource epdiemiologyDataSource
     ) {
         return builder
                 .dataSource(epdiemiologyDataSource)
-                .packages("com.personalprojects.MEDIC_ANALISYS.domains.epidemiology.model")
+                .packages("com.personalprojects.MEDIC_ANALISYS.domains.epidemiology.models")
                 .build();
     }
     @Bean
     public PlatformTransactionManager epidemiologyTransactionManager(
-            @Qualifier("epidemiologyEntityManager") EntityManagerFactory epdiemiologyEntityManager) {
-        return new JpaTransactionManager(epdiemiologyEntityManager);
+            @Qualifier("epidemiologyEntityManager") EntityManagerFactory epidemiologyEntityManager) {
+        return new JpaTransactionManager(epidemiologyEntityManager);
     }
 
     @Bean
-    public Flyway flywayUserMigration(@Qualifier("epdiemiologyDataSource") DataSource dataSource) {
+    public Flyway flywayUserMigration(@Qualifier("epidemiologyDataSource") DataSource dataSource) {
         Flyway flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .locations("classpath:db/migrations/epidemiology")
