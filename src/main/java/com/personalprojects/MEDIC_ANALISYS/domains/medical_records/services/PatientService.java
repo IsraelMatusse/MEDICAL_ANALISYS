@@ -70,7 +70,7 @@ public class PatientService {
         }
     }
 
-    public PatientResultDto getPatientByParamns(String id, String code, String name, String surname, String msisdn, String documentNumber, String gender, String bloodType) {
+    public Object getPatientByParamns(String id, String code, String name, String surname, String msisdn, String documentNumber, String gender, String bloodType) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Patient> cq= cb.createQuery(Patient.class);
 
@@ -133,14 +133,15 @@ public class PatientService {
         if (predicate != null) {
             cq.where(predicate);
         }
-
         List<Patient> resultList = entityManager.createQuery(cq).getResultList();
 
-        if (resultList.size() == 1) {
-            return new PatientResultDto(resultList.get(0));
-        } else {
-            return new PatientResultDto(resultList);
+        if(resultList.size()==1){
+            return resultList.get(0);
+        }else{
+            return resultList;
         }
+
+
     }
 
 

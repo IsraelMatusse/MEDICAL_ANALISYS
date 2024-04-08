@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -68,6 +69,23 @@ public class Patient {
     }
 
 
-
+    public Patient(Patient patient) {
+        this.code= patient.code;
+        this.birthDate=patient.birthDate;
+        this.fathersName= patient.fathersName;
+        this.email= patient.email;
+        this.height=patient.height;
+        this.weight=patient.weight;
+        this.roadNr=patient.roadNr;
+        this.houseNr=patient.houseNr;
+        this.name=patient.name;
+        this.surname=patient.surname;
+        this.mothersName= patient.mothersName;
+        this.msisdn=patient.msisdn;
+        this.documentNumber=patient.documentNumber;
+        this.neighboorHood=patient.neighboorHood;
+        this.bloodType=patient.bloodType;
+        this.gender=patient.gender;
+    }
 
 }
