@@ -46,7 +46,6 @@ public class Patient {
     private String code;
     private String gender;
     @Column(name = "blood_type")
-
     private String bloodType;
 
     public Patient(CreatePatientDto patent, String gender, String bloodType) {
@@ -66,8 +65,8 @@ public class Patient {
         this.neighboorHood=patent.neighboorHood();
         this.bloodType=bloodType;
         this.gender=gender;
-
     }
+
 
 
 

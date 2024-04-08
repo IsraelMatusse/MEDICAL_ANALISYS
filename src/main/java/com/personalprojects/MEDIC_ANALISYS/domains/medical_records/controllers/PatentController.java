@@ -27,9 +27,16 @@ public class PatentController {
 
     @GetMapping
     @Operation(description = "Obter todos os pacientes")
-    public ResponseEntity<ResponseAPI>getAllPatients(){
-        return ResponseEntity.ok(new ResponseAPI("Pacientes do sistema !", patientService.findAll()));
+    public ResponseEntity<ResponseAPI>getParentsByParams(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "document-number", required = false) String documentNumber,
+            @RequestParam(value = "surname", required = false) String surname,
+            @RequestParam(value = "blood-type", required = false) String bloodType,
+            @RequestParam(value = "msisdn", required = false) String msisdn,
+            @RequestParam(value = "gender", required = false) String gender,
+            @RequestParam(value = "code", required = false) String code,
+            @RequestParam(value = "id", required = false) String id) {
 
+        return ResponseEntity.ok(new ResponseAPI("Pacientes do sistema !", patientService.getPatientByParamns(id, code, name, surname, msisdn, documentNumber, gender, bloodType)));
     }
-
 }
