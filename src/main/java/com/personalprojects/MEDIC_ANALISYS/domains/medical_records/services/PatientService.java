@@ -1,7 +1,6 @@
 package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.services;
 
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.CreatePatientDto;
-import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.PatientResultDto;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models.Patient;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.repositories.PatientRepo;
 import com.personalprojects.MEDIC_ANALISYS.enums.BloodType;
@@ -69,7 +68,7 @@ public class PatientService {
             throw new RuntimeException(e);
         }
     }
-
+    @Transactional(value = "medicalRecordsTransactionManager")
     public Object getPatientByParamns(String id, String code, String name, String surname, String msisdn, String documentNumber, String gender, String bloodType) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Patient> cq= cb.createQuery(Patient.class);

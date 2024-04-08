@@ -15,6 +15,7 @@ public class Symptoms {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @ManyToOne
     private Screening screening;
