@@ -34,7 +34,13 @@ public record CreatePatientDto(
     float weight,
     String documentNumber,
     String gender,
-    String bloodType
+    String bloodType,
+    String maritalStatus,
+    Long nationality,
+    String province,
+    String district,
+    String ocupation
+
 
 
 ) {

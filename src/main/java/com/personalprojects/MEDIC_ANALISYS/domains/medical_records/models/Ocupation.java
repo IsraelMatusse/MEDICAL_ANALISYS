@@ -3,25 +3,18 @@ package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "symptoms")
-public class Symptoms {
+@Table(name = "ocupations")
+public class Ocupation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    @Column(columnDefinition = "TEXT")
     private String description;
-    @ManyToOne
-    private Screening screening;
-
-    public Symptoms(String description, Screening screening) {
-        this.description = description;
-        this.screening = screening;
-    }
 }

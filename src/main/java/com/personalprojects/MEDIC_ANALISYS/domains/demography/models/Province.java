@@ -21,5 +21,6 @@ public class Province extends SystemActions {
     private String code;
     private String acronym;
     @ManyToOne
+    @JoinColumn(name = "regional_zone_id")
     private RegionalZone regionalZone;
 }

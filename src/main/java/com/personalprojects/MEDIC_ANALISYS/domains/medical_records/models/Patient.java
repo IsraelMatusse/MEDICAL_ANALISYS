@@ -48,8 +48,15 @@ public class Patient {
     private String gender;
     @Column(name = "blood_type")
     private String bloodType;
+    @Column(name = "marital_status")
+    private String maritalStatus;
+    @ManyToOne
+    private Ocupation ocupation;
+    private Long nationality;
+    private String province;
+    private String district;
 
-    public Patient(CreatePatientDto patent, String gender, String bloodType) {
+    public Patient(CreatePatientDto patent, String gender, String bloodType, String province, String district, Long nationality, Ocupation ocupation) {
         this.code= GenerateCodes.generateBarcode();
         this.birthDate=patent.birthDate();
         this.fathersName= patent.fathersName();
@@ -66,6 +73,10 @@ public class Patient {
         this.neighboorHood=patent.neighboorHood();
         this.bloodType=bloodType;
         this.gender=gender;
+        this.ocupation=ocupation;
+        this.province=province;
+        this.district=district;
+        this.nationality=nationality;
     }
 
 

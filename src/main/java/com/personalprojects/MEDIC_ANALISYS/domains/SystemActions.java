@@ -18,17 +18,22 @@ import java.util.Date;
 
 public abstract class SystemActions {
     @CreatedBy
-    @Column(updatable = false)
+    @Column(updatable = false, name = "created_by")
     private String createdBy;
     @LastModifiedBy
+    @Column(name = "updated_by")
     private String updatedBy;
+    @Column(name = "deleted_by")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String deletedBy;
+    @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt = new Date();
     @UpdateTimestamp
+    @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+    @Column(name = "deleted_at")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;

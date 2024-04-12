@@ -1,6 +1,11 @@
 package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.services;
 
+import com.personalprojects.MEDIC_ANALISYS.domains.demography.models.District;
+import com.personalprojects.MEDIC_ANALISYS.domains.demography.models.Province;
+import com.personalprojects.MEDIC_ANALISYS.domains.demography.services.DistrictService;
+import com.personalprojects.MEDIC_ANALISYS.domains.demography.services.ProvinceService;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.CreatePatientDto;
+import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models.Ocupation;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models.Patient;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.repositories.PatientRepo;
 import com.personalprojects.MEDIC_ANALISYS.enums.BloodType;
@@ -25,6 +30,9 @@ import java.util.UUID;
 public class PatientService {
 
     private final PatientRepo patientRepo;
+    private final OcupationService ocupationService;
+    private final ProvinceService provinceService;
+    private final DistrictService districtService;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -57,10 +65,12 @@ public class PatientService {
             if (existsByNameAndSurnameAndMsisdnAndFathersNameAndMothersName(patientDto.name(), patientDto.surname(), patientDto.msisdn(), patientDto.fathersName(), patientDto.mothersName())) {
                 throw new ConflictException("Paciente já existe");
             }
-        Genders gender= Genders.valueOf(patientDto.gender().toUpperCase());
-        BloodType bloodType = BloodType.valueOf(patientDto.bloodType().toUpperCase());
-
-            Patient patient = new Patient(patientDto, gender.name(), bloodType.name());
+             Genders gender= Genders.valueOf(patientDto.gender().toUpperCase());
+             BloodType bloodType = BloodType.valueOf(patientDto.bloodType().toUpperCase());
+            Province province=provinceService.findByCode(patientDto.province());
+            District district = districtService.findByProvinceAndDistrictCode(province, patientDto.district());
+            Ocupation ocupation=ocupationService.findOrCreate(patientDto.ocupation());
+            Patient patient = new Patient(patientDto, gender.name(), bloodType.name(),province.getCode(), district.getCode(), patientDto.nationality(), ocupation);
             patientRepo.save(patient);
         }catch (ConflictException e){
             throw  e;

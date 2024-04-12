@@ -19,12 +19,19 @@ public class VitalSigns {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    @Column(name = "systolic_arterial_pressure")
     private double  systolicAterialPressure;
+    @Column(name = "diastolic_arterial_pressure")
     private double  diastolicAterialPressure;
+    @Column(name = "heart_rate")
     private double  heartRate;
+    @Column(name = "respiratory_rate")
     private double  respiratoryRate;
+    @Column(name = "oxygen_saturation")
     private double  oxygenSaturation;
+    @Column(name = "body_temperature")
     private double  bodyTemperature;
+
     private Date  date = new Date();
     private Time  time= new Time(System.currentTimeMillis());
 

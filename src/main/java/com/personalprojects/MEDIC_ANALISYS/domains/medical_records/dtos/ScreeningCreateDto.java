@@ -9,7 +9,6 @@ public record ScreeningCreateDto(
     LevelUrgency urgency,
     String obervations,
     String patientCode,
-    String vitalSignsId,
     double sistolicAterialPressure,
     double diastolicAterialPressure,
     double heartRate,
