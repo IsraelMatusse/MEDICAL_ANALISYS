@@ -6,7 +6,7 @@ import java.util.List;
 
 public record ScreeningCreateDto(
     String mainComplaint,
-    LevelUrgency urgency,
+    String urgency,
     String obervations,
     String patientCode,
     double sistolicAterialPressure,

@@ -13,6 +13,7 @@ import com.personalprojects.MEDIC_ANALISYS.infrastructure.exceptions.NotFoundExc
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,32 +27,38 @@ public class ScreeningService {
     private final PatientService patientService;
     private final SymptomsRepo symptomsRepo;
 
+    @Transactional(value = "medicalRecordsTransactionManager")
     public Screening create(Screening screening){
         return screeningRepo.save(screening);
     }
+    @Transactional(value = "medicalRecordsTransactionManager")
     public Screening findById(String id) throws NotFoundException {
         return screeningRepo.findById(id).orElseThrow(()->new NotFoundException("Triagem não encontrado"));
     }
 
-    @Transactional
+    @Transactional(value = "medicalRecordsTransactionManager")
     public void CreateScreening(ScreeningCreateDto screeningDto) throws NotFoundException {
+        try {
+            Patient patient = patientService.findByCode(screeningDto.patientCode());
 
-        Patient patient= patientService.findByCode(screeningDto.patientCode());
+            VitalSigns vitalSigns = new VitalSigns(screeningDto);
+            vitalSighnsRepo.save(vitalSigns);
 
-        VitalSigns vitalSigns= new VitalSigns(screeningDto);
-        vitalSighnsRepo.save(vitalSigns);
+            LevelUrgency levelUrgency = LevelUrgency.valueOf(screeningDto.urgency().toUpperCase());
 
-        LevelUrgency levelUrgency= LevelUrgency.valueOf(screeningDto.urgency().getValue());
+            Screening screening = new Screening(screeningDto, patient, vitalSigns, levelUrgency.getValue());
+            create(screening);
 
-        Screening screening= new Screening(screeningDto,patient, vitalSigns,levelUrgency.getValue());
-        create(screening);
-
-        List<Symptoms>symptoms= new ArrayList<>();
-        Symptoms symptom;
-        for (int i=0; i<screeningDto.symptoms().size(); i++){
-            symptom= new Symptoms(screeningDto.symptoms().get(i).description(), screening);
-            symptoms.add(symptom);
+            List<Symptoms> symptoms = new ArrayList<>();
+            Symptoms symptom;
+            for (int i = 0; i < screeningDto.symptoms().size(); i++) {
+                symptom = new Symptoms(screeningDto.symptoms().get(i).description(), screening);
+                symptoms.add(symptom);
+            }
+            symptomsRepo.saveAll(symptoms);
+        } catch (Exception e ) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            throw e;
         }
-        symptomsRepo.saveAll(symptoms);
     }
 }
