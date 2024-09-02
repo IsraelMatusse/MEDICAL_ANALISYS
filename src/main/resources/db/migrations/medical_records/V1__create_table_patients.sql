@@ -1,26 +1,23 @@
-CREATE TYPE BloodType AS ENUM (
-    'A_POSITIVE', 'A_NEGATIVE', 'B_POSITIVE', 'B_NEGATIVE',
-    'AB_POSITIVE', 'AB_NEGATIVE', 'O_POSITIVE', 'O_NEGATIVE', 'UNKNOWN'
-);
+CREATE TABLE IF NOT EXISTS patients(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name varchar(255) NOT NULL,
+    fathers_name varchar(255) NULL,
+    mothers_name varchar(255) NULL,
+    birth_date date NOT NULL,
+    address varchar(255) NOT NULL,
+    msisdn varchar(255) NULL,
+    email varchar(255) NULL UNIQUE,
+    road varchar(255) NULL,
+    house_nr varchar(255) NULL,
+    height varchar(255) NULL,
+    weight varchar(255) NULL,
+    document_number varchar(255) NULL,
+    blood_type varchar(255) NOT NULL,
+    gender varchar(255) NOT NULL,
+    province_id  int NULL,
+    district_id  int NULL,
+    code varchar(255) NOT NULL,
 
-CREATE TYPE Genders AS ENUM (
-    'MALE', 'FEMALE', 'OTHER', 'UNKNOWN'
-);
-
-CREATE TABLE patients (
-    id UUID PRIMARY KEY,
-    name VARCHAR(255),
-    surname VARCHAR(255),
-    fathersName VARCHAR(255),
-    mothersName VARCHAR(255),
-    birthDate DATE,
-    neighboorHood VARCHAR(255),
-    msisdn VARCHAR(255),
-    email VARCHAR(255) UNIQUE,
-    roadNr VARCHAR(255),
-    houseNr VARCHAR(255),
-    height FLOAT,
-    weight FLOAT,
-    bloodType BloodType,
-    gender Genders
+    CONSTRAINT blood_type_check CHECK (blood_type::text = ANY (ARRAY['A+'::character varying, 'A-'::character varying, 'B+'::character varying, 'B-'::character varying, 'AB+'::character varying, 'AB-'::character varying, 'O+'::character varying, 'O-'::character varying, 'Desconhecido'::character varying]::text[])),
+    CONSTRAINT gender_check CHECK (gender::text = ANY (ARRAY['MASCULINO'::character varying, 'FEMININO'::character varying, 'OUTROS'::character varying, 'DESCONHECIDO'::character varying]::text[]))
 );

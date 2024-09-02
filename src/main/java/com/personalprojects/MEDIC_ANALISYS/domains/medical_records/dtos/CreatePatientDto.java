@@ -1,5 +1,7 @@
 package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos;
 
+import com.personalprojects.MEDIC_ANALISYS.enums.BloodType;
+import com.personalprojects.MEDIC_ANALISYS.enums.Genders;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,9 +22,7 @@ public record CreatePatientDto(
     Date birthDate,
     @NotBlank(message = "Insria o bairro do paciente")
     String neighboorHood,
-    @NotBlank(message = "Insira o contaco do paciente")
     String msisdn,
-    @NotBlank(message = "Insira o email do paciente")
     String email,
     @NotBlank(message = "Insira o numero da rua do paciente")
     String roadNumber,
@@ -34,8 +34,9 @@ public record CreatePatientDto(
     float weight,
     String documentNumber,
     String gender,
-    String bloodType
-
+    String bloodType,
+    Long provinceId,
+    Long districtId
 
 ) {
 }

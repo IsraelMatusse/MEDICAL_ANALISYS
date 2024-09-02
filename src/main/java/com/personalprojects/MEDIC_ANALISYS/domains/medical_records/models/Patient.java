@@ -10,8 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -36,11 +34,11 @@ public class Patient {
     @Column(name = "document_number")
     private String documentNumber;
     private String msisdn;
-    @Column(unique = true, nullable = true)
+    @Column(unique = true)
     private String email;
-    @Column(nullable = true, name = "road_nr")
-    private String roadNr;
-    @Column(nullable = true, name = "house_nr")
+    @Column( name = "road")
+    private String road;
+    @Column( name = "house_nr")
     private String houseNr;
     private float height;
     private float weight;
@@ -48,15 +46,19 @@ public class Patient {
     private String gender;
     @Column(name = "blood_type")
     private String bloodType;
+    @Column(name = "province_id")
+    private Long provinceId;
+    @Column(name = "district_id")
+    private Long districtId;
 
-    public Patient(CreatePatientDto patent, String gender, String bloodType) {
+    public Patient(CreatePatientDto patent) {
         this.code= GenerateCodes.generateBarcode();
         this.birthDate=patent.birthDate();
         this.fathersName= patent.fathersName();
         this.email= patent.email();
         this.height=patent.height();
         this.weight=patent.weight();
-        this.roadNr=patent.roadNumber();
+        this.road =patent.roadNumber();
         this.houseNr=patent.houseNumber();
         this.name=patent.name();
         this.surname=patent.surname();
@@ -64,8 +66,10 @@ public class Patient {
         this.msisdn=patent.msisdn();
         this.documentNumber=patent.documentNumber();
         this.neighboorHood=patent.neighboorHood();
-        this.bloodType=bloodType;
-        this.gender=gender;
+        this.bloodType=patent.bloodType();
+        this.gender=patent.gender();
+        this.districtId=patent.districtId();
+        this.provinceId=patent.provinceId();
     }
 
 
@@ -76,7 +80,7 @@ public class Patient {
         this.email= patient.email;
         this.height=patient.height;
         this.weight=patient.weight;
-        this.roadNr=patient.roadNr;
+        this.road =patient.road;
         this.houseNr=patient.houseNr;
         this.name=patient.name;
         this.surname=patient.surname;

@@ -20,4 +20,14 @@ public enum BloodType {
     BloodType(String value) {
         this.value = value;
     }
+
+    public static BloodType fromString(String value) {
+        for (BloodType type : BloodType.values()) {
+            if (type.name().equalsIgnoreCase(value)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Invalid blood type: " + value);
+    }
+
 }

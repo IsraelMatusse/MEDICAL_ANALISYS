@@ -1,7 +1,6 @@
 package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models;
 
-import com.personalprojects.MEDIC_ANALISYS.enums.BloodType;
-import com.personalprojects.MEDIC_ANALISYS.enums.Genders;
+import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.ScreaningRegisterDto;
 import com.personalprojects.MEDIC_ANALISYS.enums.LevelUrgency;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,10 +19,11 @@ public class Screening {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private Date date;
+    @Column(name = "screening_date")
+    private Date screeningDate;
+    @Column(columnDefinition = "TEXT", name = "main_complaint")
     private String mainComplaint;
-    @Enumerated(EnumType.STRING)
-    private LevelUrgency urgency;
+    private String urgency;
     @Column(columnDefinition = "TEXT")
     private String obervations;
     @ManyToOne
@@ -31,5 +31,13 @@ public class Screening {
     @ManyToOne
     private VitalSigns vitalSigns;
 
+    public Screening (ScreaningRegisterDto screeningData, Patient patient, VitalSigns vitalSigns){
+        this.screeningDate=new Date();
+        this.mainComplaint=screeningData.mainComplaint();
+        this.urgency=screeningData.urgency();
+        this.obervations=screeningData.obervations();
+        this.patient=patient;
+        this.vitalSigns=vitalSigns;
+    }
 
 }

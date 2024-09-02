@@ -30,103 +30,103 @@ public class PatientService {
     private EntityManager entityManager;
 
     @Transactional(value = "medicalRecordsTransactionManager")
-    public Patient create(Patient patient){
+    public Patient create(Patient patient) {
         return patientRepo.save(patient);
     }
 
     @Transactional(value = "medicalRecordsTransactionManager")
-    public List<Patient>findAll(){
+    public List<Patient> findAll() {
         return patientRepo.findAll();
     }
+
     @Transactional(value = "medicalRecordsTransactionManager")
     public Patient findById(UUID id) throws NotFoundException {
-        return patientRepo.findById(id).orElseThrow(()->new NotFoundException("Paciente não foi encontrado"));
+        return patientRepo.findById(id).orElseThrow(() -> new NotFoundException("Paciente não foi encontrado"));
     }
 
     @Transactional(value = "medicalRecordsTransactionManager")
     public Patient findByCode(String code) throws NotFoundException {
-        return patientRepo.findByCode(code).orElseThrow(()->new NotFoundException("Paciente não foi encontrado"));
+        return patientRepo.findByCode(code).orElseThrow(() -> new NotFoundException("Paciente não foi encontrado"));
     }
 
-     @Transactional(value = "medicalRecordsTransactionManager")
-    public  boolean existsByNameAndSurnameAndMsisdnAndFathersNameAndMothersName(String name, String surname, String msisdn, String fathersName, String mothersName){
+    @Transactional(value = "medicalRecordsTransactionManager")
+    public boolean existsByNameAndSurnameAndMsisdnAndFathersNameAndMothersName(String name, String surname, String msisdn, String fathersName, String mothersName) {
         return patientRepo.existsByNameAndSurnameAndMsisdnAndFathersNameAndMothersName(name, surname, msisdn, fathersName, mothersName);
     }
+
     @Transactional(value = "medicalRecordsTransactionManager")
     public void createPatient(CreatePatientDto patientDto) throws ConflictException {
         try {
             if (existsByNameAndSurnameAndMsisdnAndFathersNameAndMothersName(patientDto.name(), patientDto.surname(), patientDto.msisdn(), patientDto.fathersName(), patientDto.mothersName())) {
                 throw new ConflictException("Paciente já existe");
             }
-        Genders gender= Genders.valueOf(patientDto.gender().toUpperCase());
-        BloodType bloodType = BloodType.valueOf(patientDto.bloodType().toUpperCase());
 
-            Patient patient = new Patient(patientDto, gender.name(), bloodType.name());
+            Patient patient = new Patient(patientDto);
             patientRepo.save(patient);
-        }catch (ConflictException e){
-            throw  e;
-        }catch (Exception e){
+        } catch (ConflictException e) {
+            throw e;
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     public Object getPatientByParamns(String id, String code, String name, String surname, String msisdn, String documentNumber, String gender, String bloodType) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Patient> cq= cb.createQuery(Patient.class);
+        CriteriaQuery<Patient> cq = cb.createQuery(Patient.class);
 
-        Root<Patient> root=cq.from(Patient.class);
-        Predicate predicate=null;
+        Root<Patient> root = cq.from(Patient.class);
+        Predicate predicate = null;
 
-        if(code!=null){
-            predicate=cb.equal(root.get("code"), code);
+        if (code != null) {
+            predicate = cb.equal(root.get("code"), code);
         }
-        if(id!=null){
-            if(predicate==null){
-                predicate=cb.equal(root.get("id"), id);
-            }else{
-                predicate=cb.and(predicate,cb.equal(root.get("id"), id));
+        if (id != null) {
+            if (predicate == null) {
+                predicate = cb.equal(root.get("id"), id);
+            } else {
+                predicate = cb.and(predicate, cb.equal(root.get("id"), id));
             }
         }
-        if(name!=null){
-            if(predicate==null){
-                predicate=cb.equal(root.get("name"), name);
-            }else{
-                predicate=cb.and(predicate,cb.equal(root.get("name"), name));
+        if (name != null) {
+            if (predicate == null) {
+                predicate = cb.equal(root.get("name"), name);
+            } else {
+                predicate = cb.and(predicate, cb.equal(root.get("name"), name));
             }
         }
-        if(surname!=null){
-            if(predicate==null){
-                predicate=cb.equal(root.get("surname"), surname);
-            }else{
-                predicate=cb.and(predicate,cb.equal(root.get("surname"), surname));
+        if (surname != null) {
+            if (predicate == null) {
+                predicate = cb.equal(root.get("surname"), surname);
+            } else {
+                predicate = cb.and(predicate, cb.equal(root.get("surname"), surname));
             }
         }
-        if(msisdn!=null){
-            if(predicate==null){
-                predicate=cb.equal(root.get("msisdn"), msisdn);
-            }else{
-                predicate=cb.and(predicate,cb.equal(root.get("msisdn"), msisdn));
+        if (msisdn != null) {
+            if (predicate == null) {
+                predicate = cb.equal(root.get("msisdn"), msisdn);
+            } else {
+                predicate = cb.and(predicate, cb.equal(root.get("msisdn"), msisdn));
             }
         }
-        if(documentNumber!=null){
-            if(predicate==null){
-                predicate=cb.equal(root.get("documentNumber"), documentNumber);
-            }else{
-                predicate=cb.and(predicate,cb.equal(root.get("documentNumber"), documentNumber));
+        if (documentNumber != null) {
+            if (predicate == null) {
+                predicate = cb.equal(root.get("documentNumber"), documentNumber);
+            } else {
+                predicate = cb.and(predicate, cb.equal(root.get("documentNumber"), documentNumber));
             }
         }
-        if(gender!=null){
-            if(predicate==null){
-                predicate=cb.equal(root.get("gender"), gender);
-            }else{
-                predicate=cb.and(predicate,cb.equal(root.get("gender"), gender));
+        if (gender != null) {
+            if (predicate == null) {
+                predicate = cb.equal(root.get("gender"), gender);
+            } else {
+                predicate = cb.and(predicate, cb.equal(root.get("gender"), gender));
             }
         }
-        if(bloodType!=null){
-            if(predicate==null){
-                predicate=cb.equal(root.get("bloodType"), bloodType);
-            }else{
-                predicate=cb.and(predicate,cb.equal(root.get("bloodType"), bloodType));
+        if (bloodType != null) {
+            if (predicate == null) {
+                predicate = cb.equal(root.get("bloodType"), bloodType);
+            } else {
+                predicate = cb.and(predicate, cb.equal(root.get("bloodType"), bloodType));
             }
         }
 
@@ -135,9 +135,9 @@ public class PatientService {
         }
         List<Patient> resultList = entityManager.createQuery(cq).getResultList();
 
-        if(resultList.size()==1){
+        if (resultList.size() == 1) {
             return resultList.get(0);
-        }else{
+        } else {
             return resultList;
         }
 
