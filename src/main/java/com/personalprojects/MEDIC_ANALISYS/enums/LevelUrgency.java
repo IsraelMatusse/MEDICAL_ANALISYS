@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum LevelUrgency {
 
-    LOW("Low"),
-    MEDIUM("Medium"),
-    HIGH("High");
+    BAIXO("BAIXO"),
+    ALTO("ALTO"),
+    MEDIO("MÉDIO");
 
     private final String value;
 

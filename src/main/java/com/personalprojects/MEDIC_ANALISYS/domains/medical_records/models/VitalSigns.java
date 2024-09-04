@@ -31,6 +31,7 @@ public class VitalSigns {
     private double  oxygenSaturation;
     @Column(name = "body_temperature")
     private double  bodyTemperature;
+    @Column(name = "created_at")
     private Date createdAt;
 
     public VitalSigns(VitalSignsRegisterDto vitalSignsData){

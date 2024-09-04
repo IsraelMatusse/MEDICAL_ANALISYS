@@ -1,7 +1,6 @@
 package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models;
 
-import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.ScreaningRegisterDto;
-import com.personalprojects.MEDIC_ANALISYS.enums.LevelUrgency;
+import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.ScreeningRegisterDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,17 +24,19 @@ public class Screening {
     private String mainComplaint;
     private String urgency;
     @Column(columnDefinition = "TEXT")
-    private String obervations;
+    private String observations;
     @ManyToOne
+    @JoinColumn(name = "patient_id")
     private Patient patient;
     @ManyToOne
+    @JoinColumn(name = "vital_signs_id")
     private VitalSigns vitalSigns;
 
-    public Screening (ScreaningRegisterDto screeningData, Patient patient, VitalSigns vitalSigns){
+    public Screening (ScreeningRegisterDto screeningData, Patient patient, VitalSigns vitalSigns){
         this.screeningDate=new Date();
         this.mainComplaint=screeningData.mainComplaint();
         this.urgency=screeningData.urgency();
-        this.obervations=screeningData.obervations();
+        this.observations =screeningData.obervations();
         this.patient=patient;
         this.vitalSigns=vitalSigns;
     }

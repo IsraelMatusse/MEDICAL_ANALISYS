@@ -1,0 +1,2 @@
+ALTER TABLE vital_signs
+RENAME COLUMN diastolicAterialPressure TO diastolic_arterial_pressure;
