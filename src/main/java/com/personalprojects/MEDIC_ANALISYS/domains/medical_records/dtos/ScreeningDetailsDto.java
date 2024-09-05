@@ -9,20 +9,21 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-public record ScreeningResDto(
-        String id,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        Date screeningDate,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
-        LocalTime screeningTime,
-        String mainComplaint,
-        String urgency,
-        String observations,
-        VitalSignsResDto vitalSigns,
-        List<SymptomsResDto> symptoms
+public record ScreeningDetailsDto(
+    String id,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    Date screeningDate,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    LocalTime screeningTime,
+    String mainComplaint,
+    String urgency,
+    String observations,
+    PatientResponseDto patient,
+    VitalSignsResDto vitalSigns,
+    List<SymptomsResDto>symptoms
 ) {
 
-    public ScreeningResDto(Screening screening, VitalSignsResDto vitalSigns, List<SymptomsResDto> symptoms){
+    public ScreeningDetailsDto(Screening screening, PatientResponseDto patient, VitalSignsResDto vitalSigns, List<SymptomsResDto>symptoms){
         this(
                 screening.getId(),
                 screening.getScreeningDate(),
@@ -32,6 +33,7 @@ public record ScreeningResDto(
                 screening.getMainComplaint(),
                 screening.getUrgency(),
                 screening.getObservations(),
+                patient,
                 vitalSigns,
                 symptoms
         );

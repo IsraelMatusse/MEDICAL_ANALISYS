@@ -1,7 +1,8 @@
 package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.controllers;
 
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.ScreeningRegisterDto;
-import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.ScreeningResDto;
+import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.ScreeningDetailsDto;
+import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.ScreeningsByPatientDTO;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.services.ScreeningService;
 import com.personalprojects.MEDIC_ANALISYS.infrastructure.ResponseAPI;
 import com.personalprojects.MEDIC_ANALISYS.infrastructure.exceptions.NotFoundException;
@@ -32,13 +33,21 @@ public class ScrreeningController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Retorna uma triagem")
-    public ResponseEntity<ScreeningResDto>findById(@PathVariable String id) throws NotFoundException {
+    public ResponseEntity<ScreeningDetailsDto>findById(@PathVariable String id) throws NotFoundException {
         return ResponseEntity.ok(screeningService.findByIdRes(id));
+    }
+
+    @GetMapping("/patient/{code}")
+    @Operation(summary = "Retorna todas as triagens de um paciente")
+    public ResponseEntity<ScreeningsByPatientDTO>getScreeningsByPatient(@PathVariable String code) throws NotFoundException {
+        return ResponseEntity.ok(screeningService.getScreeningsGroupByPatient(code));
     }
 
     @GetMapping
     @Operation(summary = "Retorna todas as triagens")
-    public ResponseEntity<List<ScreeningResDto>>findAllScreenings(){
+    public ResponseEntity<List<ScreeningDetailsDto>>findAllScreenings(){
         return ResponseEntity.ok(screeningService.findAllScreenings());
     }
+
+
 }

@@ -1,12 +1,8 @@
 package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.services;
 
-import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.PatientResponseDto;
-import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.ScreeningRegisterDto;
-import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.ScreeningResDto;
-import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.VitalSignsResDto;
+import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.*;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models.Patient;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models.Screening;
-import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models.Symptoms;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models.VitalSigns;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.repositories.ScreeningRepo;
 import com.personalprojects.MEDIC_ANALISYS.infrastructure.exceptions.NotFoundException;
@@ -41,14 +37,38 @@ public class ScreeningService {
         return screeningRepo.findAll(Sort.by("screeningDate").descending());
     }
 
-    public List<ScreeningResDto>findAllScreenings(){
+    public List<ScreeningDetailsDto>findAllScreenings(){
         List<Screening>screenings=this.findAll();
-        return screenings.stream().map(screening -> new ScreeningResDto(screening, new PatientResponseDto(screening.getPatient()), new VitalSignsResDto(screening.getVitalSigns()), symptomsService.findByScreeningRes(screening))).toList();
+        return screenings.stream().map(screening -> new ScreeningDetailsDto(screening, new PatientResponseDto(screening.getPatient()), new VitalSignsResDto(screening.getVitalSigns()), symptomsService.findByScreeningRes(screening))).toList();
     }
 
-    public ScreeningResDto findByIdRes(String id) throws NotFoundException {
+    public List<ScreeningResDto>getScreeningDetails(){
+        List<Screening>screenings=this.findAll();
+        return screenings.stream().map(screening -> new ScreeningResDto(screening, new VitalSignsResDto(screening.getVitalSigns()), symptomsService.findByScreeningRes(screening))).toList();
+    }
+
+    public ScreeningResDto getScreeningDetailsById(String id) throws NotFoundException {
         Screening screening=this.findById(id);
-        return new ScreeningResDto(screening, new PatientResponseDto(screening.getPatient()), new VitalSignsResDto(screening.getVitalSigns()), symptomsService.findByScreeningRes(screening));
+        return new ScreeningResDto(screening, new VitalSignsResDto(screening.getVitalSigns()), symptomsService.findByScreeningRes(screening));
+    }
+
+
+    public List<Screening>findByPatient(Patient patient){
+        return screeningRepo.findByPatient(patient);
+    }
+
+
+    public ScreeningsByPatientDTO getScreeningsGroupByPatient(String patientCode) throws NotFoundException {
+        Patient patient=patientService.findByCode(patientCode);
+        List<Screening>screenings=this.findByPatient(patient);
+        List<ScreeningResDto> screeningsByPatients=screenings.stream().map(screening -> new ScreeningResDto(screening, new VitalSignsResDto(screening.getVitalSigns()), symptomsService.findByScreeningRes(screening))).toList();
+        return new ScreeningsByPatientDTO(patient, screeningsByPatients);
+    }
+
+
+    public ScreeningDetailsDto findByIdRes(String id) throws NotFoundException {
+        Screening screening=this.findById(id);
+        return new ScreeningDetailsDto(screening, new PatientResponseDto(screening.getPatient()), new VitalSignsResDto(screening.getVitalSigns()), symptomsService.findByScreeningRes(screening));
     }
 
     @Transactional(rollbackFor = Exception.class, value = "medicalRecordsTransactionManager")
