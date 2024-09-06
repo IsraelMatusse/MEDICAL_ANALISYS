@@ -26,9 +26,9 @@ public class ScrreeningController {
 
     @PostMapping
     @Operation(summary = "Cria uma triagem")
-    public ResponseEntity<ResponseAPI>createScreening(@RequestBody @Valid ScreeningRegisterDto screeningData) throws NotFoundException {
+    public ResponseEntity<String>createScreening(@RequestBody @Valid ScreeningRegisterDto screeningData) throws NotFoundException {
         screeningService.createScreening(screeningData);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseAPI("Triagem criada com sucesso", null));
+        return ResponseEntity.status(HttpStatus.CREATED).body("Triagem criada com sucesso!");
     }
 
     @GetMapping("/{id}")

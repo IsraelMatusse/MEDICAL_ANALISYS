@@ -27,7 +27,6 @@ import javax.sql.DataSource;
 )
 public class DemographyConfig {
 
-
     @Bean
     @ConfigurationProperties(prefix = "demography.datasource")
     public DataSource demographyDataSource() {

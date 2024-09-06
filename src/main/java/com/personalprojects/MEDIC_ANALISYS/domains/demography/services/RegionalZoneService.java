@@ -14,10 +14,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-
 public class RegionalZoneService {
-    private RegionalZoneRepo regionalZoneRepo;
+
+    private final RegionalZoneRepo regionalZoneRepo;
     private final Logger logger = LoggerFactory.getLogger(RegionalZoneService.class);
 
     public RegionalZoneService(RegionalZoneRepo regionalZoneRepo) {

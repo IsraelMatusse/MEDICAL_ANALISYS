@@ -19,6 +19,7 @@ public class District extends SystemActions {
     private String designation;
     private String code;
     @ManyToOne
+    @JoinColumn(name = "province_id")
     private Province province;
 
 }
