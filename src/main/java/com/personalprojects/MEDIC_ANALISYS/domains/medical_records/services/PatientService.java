@@ -1,6 +1,9 @@
 package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.services;
 
+import com.personalprojects.MEDIC_ANALISYS.domains.demography.services.DistrictService;
+import com.personalprojects.MEDIC_ANALISYS.domains.demography.services.ProvinceService;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.CreatePatientDto;
+import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.PatientResDto;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.PatientResultDto;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.models.Patient;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.repositories.PatientRepo;
@@ -15,6 +18,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +30,8 @@ import java.util.UUID;
 public class PatientService {
 
     private final PatientRepo patientRepo;
+    private final ProvinceService provinceService;
+    private final DistrictService districtService;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -68,6 +74,18 @@ public class PatientService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Transactional(value = "medicalRecordsTransactionManager")
+    public List<PatientResDto>findPatientsRes(){
+        List<Patient>patients=patientRepo.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        return patients.stream().map(patient -> {
+            try {
+                return new PatientResDto(patient,provinceService.findById(patient.getProvinceId()).getDesignation(), districtService.findById(patient.getDistrictId()).getDesignation() );
+            } catch (NotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
     }
 
     public Object getPatientByParamns(String id, String code, String name, String surname, String msisdn, String documentNumber, String gender, String bloodType) {

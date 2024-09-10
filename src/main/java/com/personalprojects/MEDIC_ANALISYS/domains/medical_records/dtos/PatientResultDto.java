@@ -15,12 +15,12 @@ public class PatientResultDto{
 
     public void setPatient(Patient patient) {
         this.patient = patient;
-        this.patients = null; // Certifique-se de limpar a lista quando definir um objeto único
+        this.patients = null;
     }
 
     public void setPatientList(List<Patient> patients) {
         this.patients = patients;
-        this.patient = null; // Certifique-se de limpar o objeto quando definir uma lista
+        this.patient = null;
     }
 
     public Patient getPatient() {

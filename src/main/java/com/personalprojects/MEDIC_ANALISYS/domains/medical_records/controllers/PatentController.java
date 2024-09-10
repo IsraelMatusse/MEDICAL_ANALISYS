@@ -1,6 +1,7 @@
 package com.personalprojects.MEDIC_ANALISYS.domains.medical_records.controllers;
 
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.CreatePatientDto;
+import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.dtos.PatientResDto;
 import com.personalprojects.MEDIC_ANALISYS.domains.medical_records.services.PatientService;
 import com.personalprojects.MEDIC_ANALISYS.infrastructure.ResponseAPI;
 import com.personalprojects.MEDIC_ANALISYS.infrastructure.exceptions.ConflictException;
@@ -10,6 +11,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +30,11 @@ public class PatentController {
 
     @GetMapping
     @Operation(description = "Obter todos os pacientes")
+    public ResponseEntity<List<PatientResDto>>getPatients(){
+        return ResponseEntity.ok(patientService.findPatientsRes());
+    }
+    @GetMapping("/")
+    @Operation(description = "Obter todos os pacientes")
     public ResponseEntity<ResponseAPI>getParentsByParams(
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "document-number", required = false) String documentNumber,
@@ -36,7 +44,6 @@ public class PatentController {
             @RequestParam(value = "gender", required = false) String gender,
             @RequestParam(value = "code", required = false) String code,
             @RequestParam(value = "id", required = false) String id) {
-
         return ResponseEntity.ok(new ResponseAPI("Pacientes do sistema !", patientService.getPatientByParamns(id, code, name, surname, msisdn, documentNumber, gender, bloodType)));
     }
 }
